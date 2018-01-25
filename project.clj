@@ -8,4 +8,6 @@
                  [compojure "1.6.0"]]
   :main todoapp.core
   :profiles {:dev {:source-paths ["src" "dev"]
-                   :main todoapp.dev}})
+                   :main todoapp.dev}}
+  :uberjar-name "todoapp.jar"
+  :min-lein-version "2.0.0")
