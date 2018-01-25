@@ -7,4 +7,5 @@
                  [ring "1.6.3"]
                  [compojure "1.6.0"]]
   :main todoapp.core
-  :profiles {:dev {:main todoapp.core/-dev-main}})
+  :profiles {:dev {:source-paths ["src" "dev"]
+                   :main todoapp.dev}})
