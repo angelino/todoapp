@@ -3,10 +3,16 @@
             [ring.middleware.reload :refer [wrap-reload]]))
 
 (defn greet [req] 
-  (if (= (:uri req) "/")
+  (cond 
+    (= (:uri req) "/")
     {:status 200
      :body "Hello World!!!!!!"
      :headers {}}
+    (= (:uri req) "/goodbye") 
+    {:status 200
+     :body "Goodbye, Cruel World!"
+     :headers {}}
+    :else
     {:status 404
      :body "Not found!"
      :headers {}}))
