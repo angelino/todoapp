@@ -5,4 +5,5 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring "1.6.3"]]
-  :main todoapp.core)
+  :main todoapp.core
+  :profiles {:dev {:main todoapp.core/-dev-main}})
