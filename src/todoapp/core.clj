@@ -1,5 +1,6 @@
 (ns todoapp.core
   (:require [ring.adapter.jetty :as jetty]
+            [ring.handler.dump :refer [handle-dump]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :refer [not-found]]))
 
@@ -22,6 +23,7 @@
   (GET "/" [] greet)
   (GET "/goodbye" [] goodbye)
   (GET "/about" [] about)
+  (GET "/request" [] handle-dump)
   (not-found "Page not found"))
 
 (defn -main [port]
