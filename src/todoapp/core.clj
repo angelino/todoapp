@@ -19,11 +19,17 @@
    :body "Hi my name is Lucas and I've built this project to learn Ring and Compojure"
    :headers {}})
 
+(defn yo [req]
+  {:status 200
+   :body (str "Yo! " (get-in req [:route-params :name]) "!")
+   :headers {}})
+
 (defroutes app
   (GET "/" [] greet)
   (GET "/goodbye" [] goodbye)
   (GET "/about" [] about)
   (GET "/request" [] handle-dump)
+  (GET "/yo/:name" [] yo)
   (not-found "Page not found"))
 
 (defn -main [port]
