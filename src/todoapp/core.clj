@@ -4,7 +4,8 @@
             [ring.middleware.params :refer [wrap-params]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :refer [not-found]]
-            [todoapp.item.model :as items]))
+            [todoapp.item.model :as items]
+            [todoapp.item.handler :refer [handle-index-items]]))
 
 (defn greet [req]
   {:status 200
@@ -51,6 +52,9 @@
   (GET "/request" [] handle-dump)
   (GET "/yo/:name" [] yo)
   (GET "/calc/:n1/:op/:n2" [] calc)
+
+  (GET "/items" [] handle-index-items)
+
   (not-found "Page not found"))
 
 (defn wrap-db [handler]
