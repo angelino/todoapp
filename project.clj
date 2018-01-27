@@ -5,7 +5,9 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [ring "1.6.3"]
-                 [compojure "1.6.0"]]
+                 [compojure "1.6.0"]
+                 [org.clojure/java.jdbc "0.7.5"]
+                 [org.postgresql/postgresql "42.2.1"]]
   :main todoapp.core
   :profiles {:dev {:source-paths ["src" "dev"]
                    :main todoapp.dev}}

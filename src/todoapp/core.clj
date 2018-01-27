@@ -2,7 +2,8 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
             [compojure.core :refer [defroutes GET]]
-            [compojure.route :refer [not-found]]))
+            [compojure.route :refer [not-found]]
+            [todoapp.item.model :as items]))
 
 (defn greet [req]
   {:status 200
@@ -51,5 +52,8 @@
   (GET "/calc/:n1/:op/:n2" [] calc)
   (not-found "Page not found"))
 
+(def db "jdbc:postgres://localhost/todoapp")
+
 (defn -main [port]
+  (items/create-table db)
   (jetty/run-jetty app {:port (Integer. port)}))
