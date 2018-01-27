@@ -2,10 +2,11 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
             [ring.middleware.params :refer [wrap-params]]
-            [compojure.core :refer [defroutes ANY GET]]
+            [compojure.core :refer [defroutes ANY GET POST]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
-            [todoapp.item.handler :refer [handle-index-items]]))
+            [todoapp.item.handler :refer [handle-index-items
+                                          handle-create-item]]))
 
 (defn greet [req]
   {:status 200
@@ -54,8 +55,11 @@
   (GET "/calc/:n1/:op/:n2" [] calc)
 
   (GET "/items" [] handle-index-items)
+  (POST "/items" [] handle-create-item)
 
   (not-found "Page not found"))
+
+(def db "jdbc:postgres://localhost/todoapp")
 
 (defn wrap-db [handler]
   (fn [req]
@@ -70,8 +74,6 @@
       wrap-params
       wrap-db
       wrap-server-name))
-
-(def db "jdbc:postgres://localhost/todoapp")
 
 (defn -main [port]
   (items/create-table db)
