@@ -2,7 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
             [ring.middleware.params :refer [wrap-params]]
-            [compojure.core :refer [defroutes GET]]
+            [compojure.core :refer [defroutes ANY GET]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
             [todoapp.item.handler :refer [handle-index-items]]))
@@ -49,7 +49,7 @@
   (GET "/" [] greet)
   (GET "/goodbye" [] goodbye)
   (GET "/about" [] about)
-  (GET "/request" [] handle-dump)
+  (ANY "/request" [] handle-dump)
   (GET "/yo/:name" [] yo)
   (GET "/calc/:n1/:op/:n2" [] calc)
 
