@@ -59,7 +59,8 @@
 
   (not-found "Page not found"))
 
-(def db "jdbc:postgres://localhost/todoapp")
+(def db (or (System/getenv "DATABASE_URL")
+            "jdbc:postgres://localhost/todoapp"))
 
 (defn wrap-db [handler]
   (fn [req]
