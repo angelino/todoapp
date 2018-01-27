@@ -57,10 +57,15 @@
   (fn [req]
     (handler (assoc req :todoapp/db db))))
 
+(defn wrap-server-name [handler]
+  (fn [req]
+    (assoc-in (handler req) [:headers "Server"] "Todo App")))
+
 (def app
   (-> routes
       wrap-params
-      wrap-db))
+      wrap-db
+      wrap-server-name))
 
 (def db "jdbc:postgres://localhost/todoapp")
 
