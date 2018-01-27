@@ -2,19 +2,15 @@
   (:require [todoapp.item.model :refer [create-item
                                         read-items
                                         update-item
-                                        delete-item]]))
+                                        delete-item]]
+            [todoapp.item.view :refer [items-page]]))
 
 (defn handle-index-items [req]
   (let [db (:todoapp/db req)
         items (read-items db)]
     {:status 200
-     :body (str "<div>" (mapv :name items) "</div>"
-                "<form action=\"/items\" method=\"POST\">"
-                "<input type=\"text\" name=\"name\" placeholder=\"Name\">"
-                "<input type=\"text\" name=\"description\" placeholder=\"Description\">"
-                "<input type=\"submit\">"
-                "</form>")
-     :headers {}}))
+     :headers {}
+     :body (items-page items)}))
 
 (defn handle-create-item [req]
   (let [db (:todoapp/db req)
