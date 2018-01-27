@@ -1,6 +1,7 @@
 (ns todoapp.core
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
+            [ring.middleware.params :refer [wrap-params]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]))
@@ -43,7 +44,7 @@
        :body (str "Operation unknown: " op)
        :headers {}})))
 
-(defroutes app
+(defroutes routes
   (GET "/" [] greet)
   (GET "/goodbye" [] goodbye)
   (GET "/about" [] about)
@@ -51,6 +52,9 @@
   (GET "/yo/:name" [] yo)
   (GET "/calc/:n1/:op/:n2" [] calc)
   (not-found "Page not found"))
+
+(def app
+  (wrap-params routes))
 
 (def db "jdbc:postgres://localhost/todoapp")
 
