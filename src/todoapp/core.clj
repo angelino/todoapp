@@ -2,6 +2,8 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
             [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [ring.middleware.file-info :refer [wrap-file-info]]
             [compojure.core :refer [defroutes ANY GET POST]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
@@ -72,9 +74,11 @@
 
 (def app
   (-> routes
-      wrap-params
-      wrap-db
-      wrap-server-name))
+      (wrap-params)
+      (wrap-db)
+      (wrap-server-name)
+      (wrap-resource "static")
+      (wrap-file-info)))
 
 (defn -main [port]
   (items/create-table db)
