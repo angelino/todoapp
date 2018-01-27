@@ -4,7 +4,7 @@
 (defn create-table [db]
   (db/execute!
    db
-   ["CREATE EXTENSION IF NOT EXISTS "uuid-ossp""])
+   ["CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\""])
   (db/execute!
    db
    ["CREATE TABLE IF NOT EXISTS items(
@@ -13,3 +13,23 @@
        description TEXT NOT NULL,
        checked BOOLEAN NOT NULL DEFAULT FALSE,
        created_at TIMESTAMPTZ NOT NULL DEFAULT now())"]))
+
+(defn create-item [db name description]
+  (:id (first (db/query
+               db
+               ["INSERT INTO items(name, description) VALUES (?, ?) RETURNING id" name description]))))
+
+(defn update-item [db id checked]
+  (= [1] (db/execute!
+          db
+          ["UPDATE items SET checked = ? WHERE id =?" checked id])))
+
+(defn delete-item [db id]
+  (= [1] (db/execute!
+          db
+          ["DELETE FROM items WHERE id = ?" id])))
+
+(defn read-items [db]
+  (db/query
+   db
+   ["SELECT id, name, description, checked, created_at FROM items ORDER BY created_at"]))
