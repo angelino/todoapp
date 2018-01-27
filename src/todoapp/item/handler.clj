@@ -20,3 +20,15 @@
     {:status 302
      :headers {"Location" "/items"}
      :body ""}))
+
+(defn handle-delete-item [req]
+  (let [db (:todoapp/db req)
+        item-id (java.util.UUID/fromString (get-in req [:params :item-id])) 
+        deleted? (delete-item db item-id)]
+    (if deleted?
+      {:status 302
+       :headers {"Location" "/items"}
+       :body ""}
+      {:status 404
+       :headers {}
+       :body "Not found"})))

@@ -4,11 +4,12 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [compojure.core :refer [defroutes ANY GET POST]]
+            [compojure.core :refer [defroutes ANY GET POST DELETE]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
             [todoapp.item.handler :refer [handle-index-items
-                                          handle-create-item]]))
+                                          handle-create-item
+                                          handle-delete-item]]))
 
 (defn greet [req]
   {:status 200
@@ -58,6 +59,7 @@
 
   (GET "/items" [] handle-index-items)
   (POST "/items" [] handle-create-item)
+  (DELETE "/items/:item-id" [] handle-delete-item)
 
   (not-found "Page not found"))
 
@@ -72,9 +74,19 @@
   (fn [req]
     (assoc-in (handler req) [:headers "Server"] "Todo App")))
 
+(def sim-methods {"DELETE" :delete "PUT" :put})
+
+(defn wrap-sim-methods [handler]
+  (fn [req]
+    (if-let [method (and (:post (:request-method req))
+                         (sim-methods (get-in req [:params "_method"])))]
+      (handler (assoc req :request-method method))
+      (handler req))))
+
 (def app
   (-> routes
       (wrap-params)
+      (wrap-sim-methods)
       (wrap-db)
       (wrap-server-name)
       (wrap-resource "static")
