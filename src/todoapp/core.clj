@@ -53,8 +53,14 @@
   (GET "/calc/:n1/:op/:n2" [] calc)
   (not-found "Page not found"))
 
+(defn wrap-db [handler]
+  (fn [req]
+    (handler (assoc req :todoapp/db db))))
+
 (def app
-  (wrap-params routes))
+  (-> routes
+      wrap-params
+      wrap-db))
 
 (def db "jdbc:postgres://localhost/todoapp")
 
