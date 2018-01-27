@@ -4,11 +4,12 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [compojure.core :refer [defroutes ANY GET POST DELETE]]
+            [compojure.core :refer [defroutes ANY GET POST PUT DELETE]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
             [todoapp.item.handler :refer [handle-index-items
                                           handle-create-item
+                                          handle-update-item
                                           handle-delete-item]]))
 
 (defn greet [req]
@@ -60,6 +61,7 @@
   (GET "/items" [] handle-index-items)
   (POST "/items" [] handle-create-item)
   (DELETE "/items/:item-id" [] handle-delete-item)
+  (PUT "/items/:item-id" [] handle-update-item)
 
   (not-found "Page not found"))
 

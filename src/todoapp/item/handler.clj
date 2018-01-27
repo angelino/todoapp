@@ -32,3 +32,16 @@
       {:status 404
        :headers {}
        :body "Not found"})))
+
+(defn handle-update-item [req]
+  (let [db (:todoapp/db req)
+        item-id (java.util.UUID/fromString (get-in req [:params :item-id]))
+        checked (get-in req [:params "checked"])
+        updated? (update-item db item-id (= "true" checked))]
+    (if updated?
+      {:status 302
+       :headers {"Location" "/items"}
+       :body ""}
+      {:status 404
+       :headers {}
+       :body "Not found"})))
