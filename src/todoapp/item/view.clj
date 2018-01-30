@@ -71,7 +71,8 @@
           [:body
            [:div.container
             [:div.row
-             [:h1 "My Items"]
+             [:h1 "My Items"]]
+            [:div.row
              (items-table items)]
             [:div.row
               [:div.col-sm-6
