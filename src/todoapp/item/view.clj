@@ -41,6 +41,25 @@
     [:div.btn-group
      [:input.btn.btn-primary.btn-xs {:type :submit :value (if checked "DONE" "TODO")}]]]))
 
+(defn items-table [items]
+  (html
+   (if (seq items)
+     [:table.table.table-striped
+      [:thead
+       [:tr
+        [:th "Remove"]
+        [:th "Status"]
+        [:th "Name"]
+        [:th "Description"]]]
+      [:tbody
+       (for [item items]
+         [:tr
+          [:td (delete-item-form (:id item))]
+          [:td (update-item-form (:id item) (:checked item))]
+          [:td (h (:name item))]
+          [:td (h (:description item))]])]]
+     [:div.col-sm-offset-1 "There are no items."])))
+
 (defn items-page [items]
   (html5 {:lang :en}
          [:head
@@ -53,22 +72,7 @@
            [:div.container
             [:div.row
              [:h1 "My Items"]
-             (if (seq items)
-               [:table.table.table-striped
-                [:thead
-                 [:tr
-                  [:th "Remove"]
-                  [:th "Status"]
-                  [:th "Name"]
-                  [:th "Description"]]]
-                [:tbody
-                 (for [item items]
-                   [:tr
-                    [:td (delete-item-form (:id item))]
-                    [:td (update-item-form (:id item) (:checked item))]
-                    [:td (h (:name item))]
-                    [:td (h (:description item))]])]]
-               [:div.col-sm-offset-1 "There are no items."])]
+             (items-table items)]
             [:div.row
               [:div.col-sm-6
                [:h3 "Create new Item"
