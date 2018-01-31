@@ -10,7 +10,10 @@
             [todoapp.item.handler :refer [handle-index-items
                                           handle-create-item
                                           handle-update-item
-                                          handle-delete-item]]))
+                                          handle-delete-item]]
+            [todoapp.list.handler :refer [handle-index-lists
+                                          handle-create-list
+                                          handle-delete-list]]))
 
 (defn greet [req]
   {:status 200
@@ -57,6 +60,10 @@
   (ANY "/request" [] handle-dump)
   (GET "/yo/:name" [] yo)
   (GET "/calc/:n1/:op/:n2" [] calc)
+
+  (GET "/lists" [] handle-index-lists)
+  (POST "/lists" [] handle-create-list)
+  (DELETE "/lists/:list-id" [] handle-delete-list)
 
   (GET "/items" [] handle-index-items)
   (POST "/items" [] handle-create-item)
