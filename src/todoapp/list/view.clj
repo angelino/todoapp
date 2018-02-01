@@ -2,6 +2,21 @@
   (:require [hiccup.page :refer [html5]]
             [hiccup.core :refer [h html]]))
 
+(defn create-list-form []
+  (html
+   [:form.form-horizontal
+    {:method "POST" :action "/lists"}
+    [:div.form-group.row
+     [:div.col-sm-2
+      [:label.control-label {:for :name-input} "Name"]]
+     [:div.col-sm-10
+      [:input#name-input.form-control {:name :name
+                                       :placeholder "Name"}]]]
+    [:div.form-group.row
+     [:div.col-sm.offset-sm-2
+      [:input.btn.btn-primary {:type :submit
+                               :value "New List"}]]]]))
+
 (defn lists-ul [lists]
   (html
    [:ul
@@ -25,6 +40,8 @@
             [:div.row
              [:h1 "My Lists"]]
             [:div.row
-             (lists-ul lists)]]
+             (lists-ul lists)]
+            [:div.row
+             [:div.col-sm-6 (create-list-form)]]]
            [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}]
            [:script {:src "/bootstrap/js/bootstrap.min.js"}]]]))
