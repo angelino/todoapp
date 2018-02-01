@@ -34,14 +34,14 @@
           [:meta {:name :viewport
                   :content "width=device-width, initial-scale=1.0"}]
           [:link {:href "/bootstrap/css/bootstrap.min.css"
-                  :rel :stylesheet}]
-          [:body
-           [:div.container
-            [:div.row
-             [:h1 "My Lists"]]
-            [:div.row
-             (lists-ul lists)]
-            [:div.row
-             [:div.col-sm-6 (create-list-form)]]]
-           [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}]
-           [:script {:src "/bootstrap/js/bootstrap.min.js"}]]]))
+                  :rel :stylesheet}]]
+         [:body
+          [:div.container
+           [:div.row
+            [:h1 "My Lists"]]
+           [:div.row
+            (lists-ul lists)]
+           [:div.row
+            [:div.col-sm-6 (create-list-form)]]]
+          [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}]
+          [:script {:src "/bootstrap/js/bootstrap.min.js"}]]))
