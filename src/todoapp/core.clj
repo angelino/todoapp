@@ -66,10 +66,10 @@
   (POST "/lists" [] handle-create-list)
   (DELETE "/lists/:list-id" [] handle-delete-list)
 
-  (GET "/items" [] handle-index-items)
-  (POST "/items" [] handle-create-item)
-  (DELETE "/items/:item-id" [] handle-delete-item)
-  (PUT "/items/:item-id" [] handle-update-item)
+  (GET "/lists/:list-id/items" [] handle-index-items)
+  (POST "/lists/:list-id/items" [] handle-create-item)
+  (DELETE "/lists/:list-id/items/:item-id" [] handle-delete-item)
+  (PUT "/lists/:list-id/items/:item-id" [] handle-update-item)
 
   (not-found "Page not found"))
 
