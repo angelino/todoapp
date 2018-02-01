@@ -7,6 +7,7 @@
             [compojure.core :refer [defroutes ANY GET POST PUT DELETE]]
             [compojure.route :refer [not-found]]
             [todoapp.item.model :as items]
+            [todoapp.list.model :as lists]
             [todoapp.item.handler :refer [handle-index-items
                                           handle-create-item
                                           handle-update-item
@@ -102,5 +103,6 @@
       (wrap-file-info)))
 
 (defn -main [port]
+  (lists/create-table db)
   (items/create-table db)
   (jetty/run-jetty app {:port (Integer. port)}))
