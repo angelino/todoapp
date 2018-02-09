@@ -4,8 +4,14 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
+            [ring.util.response :refer [response]]
             [compojure.core :refer [defroutes ANY GET POST PUT DELETE]]
             [compojure.route :refer [not-found]]
+            [cemerick.friend :as friend]
+            [cemerick.friend.workflows :as workflows]
+            [cemerick.friend.credentials :as credentials]
+            [hiccup.core :refer [html]]
+            [hiccup.page :refer [html5]]
             [todoapp.item.model :as items]
             [todoapp.list.model :as lists]
             [todoapp.item.handler :refer [handle-index-items
@@ -54,6 +60,32 @@
        :body (str "Operation unknown: " op)
        :headers {}})))
 
+(defn login-form []
+  (html
+   [:form.form-signin {:action "/sessions"}
+    [:h1 "Please sign in"]
+    [:input#email.form-control {:type :email :placeholder "Email Address"}]
+    [:input#password.form-control {:type :password :placeholder "Password"}]
+    [:button.btn.btn-primary.btn-lg.btn-block {:type :submit} "Sign in"]]))
+
+(defn login-page []
+  (html5 {:lang :en}
+         [:head
+          [:title "Todo App"]
+          [:meta {:name :viewport
+                  :content "width=device-width, initial-scale=1.0"}]
+          [:style "* { border: 1px red solid !important; }"]
+          [:link {:href "/bootstrap/css/bootstrap.min.css"
+                  :rel :stylesheet}]
+          [:link {:href "/css/signin.css"
+                  :rel :stylesheet}]]
+         [:body.text-center (login-form)
+          [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}]
+          [:script {:src "/bootstrap/js/bootstrap.min.js"}]]))
+
+(defn handle-login [req]
+  (response (login-page)))
+
 (defroutes routes
   (GET "/" [] greet)
   (GET "/goodbye" [] goodbye)
@@ -62,7 +94,9 @@
   (GET "/yo/:name" [] yo)
   (GET "/calc/:n1/:op/:n2" [] calc)
 
-  (GET "/lists" [] handle-index-lists)
+  (GET "/login" [] handle-login)
+
+  (GET "/lists" [] (friend/authenticated handle-index-lists))
   (POST "/lists" [] handle-create-list)
   (DELETE "/lists/:list-id" [] handle-delete-list)
 
@@ -74,7 +108,7 @@
   (not-found "Page not found"))
 
 (def db (or (System/getenv "DATABASE_URL")
-            "jdbc:postgres://localhost/todoapp"))
+            "jdbc:postgres://localhost/todoapp?user=las&password=12345"))
 
 (defn wrap-db [handler]
   (fn [req]
@@ -93,8 +127,14 @@
       (handler (assoc req :request-method method))
       (handler req))))
 
+(def users {"root" {:username "root"
+                    :password (credentials/hash-bcrypt "admin")
+                    :roles #{::admin}}})
+
 (def app
   (-> routes
+      (friend/authenticate {:credential-fn (partial credentials/bcrypt-credential-fn users)
+                            :workflows [(workflows/interactive-form)]})
       (wrap-params)
       (wrap-sim-methods)
       (wrap-db)

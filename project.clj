@@ -8,7 +8,8 @@
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.5"]
-                 [org.postgresql/postgresql "42.2.1"]]
+                 [org.postgresql/postgresql "42.2.1"]
+                 [com.cemerick/friend "0.2.3"]]
   :main todoapp.core
   :profiles {:dev {:source-paths ["src" "dev"]
                    :main todoapp.dev}}
