@@ -97,13 +97,13 @@
   (GET "/login" [] handle-login)
 
   (GET "/lists" [] (friend/authenticated handle-index-lists))
-  (POST "/lists" [] handle-create-list)
-  (DELETE "/lists/:list-id" [] handle-delete-list)
+  (POST "/lists" [] (friend/authenticated handle-create-list))
+  (DELETE "/lists/:list-id" [] (friend/authenticated handle-delete-list))
 
-  (GET "/lists/:list-id/items" [] handle-index-items)
-  (POST "/lists/:list-id/items" [] handle-create-item)
-  (DELETE "/lists/:list-id/items/:item-id" [] handle-delete-item)
-  (PUT "/lists/:list-id/items/:item-id" [] handle-update-item)
+  (GET "/lists/:list-id/items" [] (friend/authenticated handle-index-items))
+  (POST "/lists/:list-id/items" [] (friend/authenticated handle-create-item))
+  (DELETE "/lists/:list-id/items/:item-id" [] (friend/authenticated handle-delete-item))
+  (PUT "/lists/:list-id/items/:item-id" [] (friend/authenticated handle-update-item))
 
   (not-found "Page not found"))
 
