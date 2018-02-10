@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.handler.dump :refer [handle-dump]]
             [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.session :refer [wrap-session]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
             [ring.util.response :refer [response]]
@@ -62,10 +63,10 @@
 
 (defn login-form []
   (html
-   [:form.form-signin {:action "/sessions"}
+   [:form.form-signin {:method :post :action "/login"}
     [:h1 "Please sign in"]
-    [:input#email.form-control {:type :email :placeholder "Email Address"}]
-    [:input#password.form-control {:type :password :placeholder "Password"}]
+    [:input#email.form-control {:type :email :name "username" :placeholder "Email Address"}]
+    [:input#password.form-control {:type :password :name "password" :placeholder "Password"}]
     [:button.btn.btn-primary.btn-lg.btn-block {:type :submit} "Sign in"]]))
 
 (defn login-page []
@@ -126,14 +127,16 @@
       (handler (assoc req :request-method method))
       (handler req))))
 
-(def users {"root" {:username "root"
-                    :password (credentials/hash-bcrypt "admin")
-                    :roles #{::admin}}})
+(def users {"root@admin.com" {:username "root@admin.com"
+                              :password (credentials/hash-bcrypt "admin")
+                              :roles #{::admin}}})
 
 (def app
   (-> routes
       (friend/authenticate {:credential-fn (partial credentials/bcrypt-credential-fn users)
-                            :workflows [(workflows/interactive-form)]})
+                            :workflows [(workflows/interactive-form)]
+                            :default-landing-uri "/lists"})
+      (wrap-session)
       (wrap-params)
       (wrap-sim-methods)
       (wrap-db)
