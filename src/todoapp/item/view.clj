@@ -60,6 +60,14 @@
           [:td (h (:description item))]])]]
      [:div.col-sm-offset-1 "There are no items."])))
 
+(defn breadcrumb []
+  (html
+   [:nav {:aria-label "breadcrumb"}
+    [:ol.breadcrumb
+     [:li.breadcrumb-item [:a {:href "/"} "Home"]]
+     [:li.breadcrumb-item [:a {:href "/lists"} "Lists"]]
+     [:li.breadcrumb-item.active "Items"]]]))
+
 (defn items-page [list-id items]
   (html5 {:lang :en}
          [:head
@@ -72,6 +80,8 @@
           [:div.container
            [:div.row
             [:h1 "My Items"]]
+           [:div.row
+            (breadcrumb)]
            [:div.row
             (items-table list-id items)]
            [:div.row

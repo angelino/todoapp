@@ -27,6 +27,13 @@
        [:span.badge.badge-info
         (h (:items-left list))]])]))
 
+(defn breadcrumb []
+  (html
+   [:nav {:aria-label "breadcrumb"}
+    [:ol.breadcrumb
+     [:li.breadcrumb-item [:a {:href "/"} "Home"]]
+     [:li.breadcrumb-item.active "Lists"]]]))
+
 (defn lists-page [lists]
   (html5 {:lang :en}
          [:head
@@ -39,6 +46,8 @@
           [:div.container
            [:div.row
             [:h1 "My Lists"]]
+           [:div.row
+            (breadcrumb)]
            [:div.row
             (lists-ul lists)]
            [:div.row
