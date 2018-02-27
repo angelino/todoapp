@@ -1,10 +1,20 @@
 # todoapp
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure web app designed to learn Clojure web libraries.
+
+You can see a deployed version at https://rocky-lake-27661.herokuapp.com
+
+## Dependencies
+
+1. Clojure 1.8.0
+2. Leiningen 2.0.0 (https://leiningen.org)
+3. Postgres 9.4 (https://www.postgresql.org)
 
 ## Usage
 
-FIXME
+```sh
+lein run 8000
+```
 
 ## License
 
